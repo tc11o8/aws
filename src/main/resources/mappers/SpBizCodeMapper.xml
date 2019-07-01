@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smalleyes.aws.mapper.SpBizCodeMapper">
+
+	<select id="getList" resultType="com.smalleyes.aws.pojo.SpBizCode">
+		select biz_id bizId,biz_name bizName,day_count dayCount,
+		total_count totalCount,min_time_span minTimeSpan from 
+		sp_biz_code where state=1 order by min_time_span asc 
+	</select>
+
+</mapper>

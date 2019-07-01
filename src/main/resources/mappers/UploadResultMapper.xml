@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smalleyes.aws.mapper.UploadResultMapper">
+
+  <insert id="insert">
+    insert into upload_result_${currentDate}(
+        query_string,
+        imsi,
+        from_phone,
+        message,
+        expression,
+        score,
+        operator,
+        create_time
+      )
+    values 
+    <foreach collection="addList" item="item" index="index" separator=",">
+        (
+          #{item.queryString}, 
+          #{item.imsi}, 
+          #{item.fromPhone}, 
+          #{item.message}, 
+          #{item.expression}, 
+          #{item.score}, 
+          #{item.operator}, 
+          Now()
+        )
+    </foreach>
+    
+  </insert>
+  
+</mapper>
