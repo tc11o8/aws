@@ -38,15 +38,9 @@ public class QpsAspect {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(QpsAspect.class);
 
-	private static final ConcurrentHashMap<Integer, LongAdder> STATS_MAP = new ConcurrentHashMap<>(128);
-
 	//10秒，分10次
 	private static HystrixRollingNumber counter = new HystrixRollingNumber(10000, 10);
-	
-	public static Map<Integer, LongAdder> getStatsMap() {
-		return Collections.unmodifiableMap(STATS_MAP);
-	}
-	
+
 	public static long get10Second() {
 		long count = counter.getRollingSum(HystrixRollingNumberEvent.SUCCESS);
 		return count;
@@ -95,23 +89,7 @@ public class QpsAspect {
 		counter.increment(HystrixRollingNumberEvent.SUCCESS);
 	}
 	
-	private static void doIncr() {
-		int second = LocalDateTime.now().getSecond();
-		Integer key = Integer.valueOf(second);
-		LongAdder val = STATS_MAP.get(key);
-		if (val == null) {
-			System.out.println("val=null");
-			LongAdder longAdder = new LongAdder();
-			longAdder.increment();
-			LongAdder adder = STATS_MAP.putIfAbsent(key, longAdder);
-			if (adder != null) {
-				System.out.println("adder!=null");
-				adder.increment();
-			}
-		} else {
-			val.increment();
-		}
-	}
+
 
 	public static void main(String[] args) {
 		
@@ -169,21 +147,7 @@ public class QpsAspect {
 		
 		long dd = counter.getRollingSum(HystrixRollingNumberEvent.SUCCESS);
 		System.out.println(dd);
-		
-		
-		
-		Set<Entry<Integer, LongAdder>> set = STATS_MAP.entrySet();
 
-		Iterator<Entry<Integer, LongAdder>> iter = set.iterator();
-
-		while (iter.hasNext()) {
-			Entry<Integer, LongAdder> entry = iter.next();
-			System.out.println(entry.getKey());
-			System.out.println(entry.getValue().intValue());
-
-		}
-
-		//15766107629
 	}
 
 }
